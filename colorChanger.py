@@ -12,7 +12,7 @@ window.resizable(False, False)
 
 def openFile():
     global leng
-    filename=filedialog.askopenfilename(initialdir="C:/")
+    filename=filedialog.askopenfilename(initialdir="C:/Users/JI/Desktop/정보보안/스테가노 파일/3")
     with open(filename, 'rb') as f:
         content = f.read()
     mod=binascii.hexlify(content).decode()
@@ -58,13 +58,14 @@ menu1.add_command(label="다른 이름으로 저장")
 menuBar.add_cascade(label="파일", menu=menu1)
 
 menu2=Menu(menuBar, tearoff=0)
-menu2.add_command(label="버전 알림")
+menu2.add_command(label="버전 알림", command=lambda:messagebox.showwarning("정보", "미완성"))
 menuBar.add_cascade(label="정보", menu=menu2)
 
 window.config(menu=menuBar)
 
+
 def changeColor(o):
-    pass
+    print(o)
 
 b=[]
 def showColor(co):
@@ -76,15 +77,15 @@ def showColor(co):
         start+=2
 
     fillArr=[]
-    for i in range(0,len(plte),3):
-        fillArr.append([plte[i],plte[i+1],plte[i+2]])
+    for k in range(0,len(plte),3):
+        fillArr.append([plte[k],plte[k+1],plte[k+2]])
 
     for j in window.grid_slaves():
         j.destroy()
     b=[]
     for i in range(len(fillArr)):
         color=str("#")+str(fillArr[i][0])+str(fillArr[i][1])+str(fillArr[i][2])
-        b.append(Button(window, overrelief="flat", width=10, height=5, command=changeColor(i), background=color))
+        b.append(Button(window, overrelief="flat", width=10, height=5, command=lambda c=i:changeColor(b[c].cget("text")), background=color, text=i))
         b[-1].grid(column=i%20,row=i//20)
 
 window.mainloop()
