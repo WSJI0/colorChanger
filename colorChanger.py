@@ -64,7 +64,7 @@ menuBar.add_cascade(label="정보", menu=menu2)
 window.config(menu=menuBar)
 
 def changeColor(o):
-    
+    pass
 
 b=[]
 def showColor(co):
