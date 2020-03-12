@@ -24,14 +24,23 @@ def openFile():
     newmod.write(mod)
     newmod.close()
 
-    if mod[0:16]=="89504e470d0a1a0a":
-        if mod[mod.index("49484452")+26:mod.index("49484452")+28]=="03":
+    if mod[0:16]=="89504e470d0a1a0a": #png signature
+        if mod[mod.index("49484452")+26:mod.index("49484452")+28]=="03": #indexed-color
             leng=int(str(mod[mod.index("504c5445")-8:mod.index("504c5445")]),16)*2
-            if mod.count("504c5445")!=1:
+            if mod.count("504c5445")!=1: #PLTE
                 messagebox.showwarning("불러올 수 없음", "손상된 png 파일입니다.")
                 os.remove(newdir)
             else:
                 showColor(mod[mod.index("504c5445")+8:mod.index("504c5445")+8+leng])
+        elif mod[mod.index("49484452")+26:mod.index("49484452")+28]=="02": #truecolor
+            #pass
+        elif mod[mod.index("49484452")+26:mod.index("49484452")+28]=="04": #grayscale with alpha
+            #pass
+        elif mod[mod.index("49484452")+26:mod.index("49484452")+28]=="06": #truecolor with alpha
+            #pass
+        elif mod[mod.index("49484452")+26:mod.index("49484452")+28]=="00": #grayscale
+            #pass
+
         else:
             messagebox.showwarning("불러올 수 없음", "아직은 불러올 수 없는 png 파일입니다.")
             os.remove(newdir)
@@ -55,10 +64,11 @@ menuBar.add_cascade(label="정보", menu=menu2)
 window.config(menu=menuBar)
 
 def changeColor(o):
-    print(o)
+    
 
-
+b=[]
 def showColor(co):
+    global b
     plte=[]
     start=0
     while start!=leng:
@@ -69,6 +79,8 @@ def showColor(co):
     for i in range(0,len(plte),3):
         fillArr.append([plte[i],plte[i+1],plte[i+2]])
 
+    for j in window.grid_slaves():
+        j.destroy()
     b=[]
     for i in range(len(fillArr)):
         color=str("#")+str(fillArr[i][0])+str(fillArr[i][1])+str(fillArr[i][2])
