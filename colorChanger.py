@@ -33,13 +33,13 @@ def openFile():
             else:
                 showColor(mod[mod.index("504c5445")+8:mod.index("504c5445")+8+leng])
         elif mod[mod.index("49484452")+26:mod.index("49484452")+28]=="02": #truecolor
-            #pass
+            pass
         elif mod[mod.index("49484452")+26:mod.index("49484452")+28]=="04": #grayscale with alpha
-            #pass
+            pass
         elif mod[mod.index("49484452")+26:mod.index("49484452")+28]=="06": #truecolor with alpha
-            #pass
+            pass
         elif mod[mod.index("49484452")+26:mod.index("49484452")+28]=="00": #grayscale
-            #pass
+            pass
 
         else:
             messagebox.showwarning("불러올 수 없음", "아직은 불러올 수 없는 png 파일입니다.")
