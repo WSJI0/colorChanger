@@ -1,6 +1,7 @@
 from tkinter import filedialog
 from tkinter import Button
 from tkinter import messagebox
+from tkinter import colorchooser
 from tkinter import *
 import binascii
 import os
@@ -65,11 +66,14 @@ window.config(menu=menuBar)
 
 
 def changeColor(o):
-    print(o)
+    global fillArr,b
+    color=colorchooser.askcolor(color=str("#")+str(fillArr[o][0])+str(fillArr[o][1])+str(fillArr[o][2]))
+    b[o]=Button(window, overrelief="flat", width=10, height=5, command=lambda c=o:changeColor(b[c].cget("text")), background=color[1], text=o)
+    b[o].grid(column=o%20,row=o//20)
 
 b=[]
 def showColor(co):
-    global b
+    global b,fillArr
     plte=[]
     start=0
     while start!=leng:
