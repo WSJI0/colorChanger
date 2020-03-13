@@ -13,7 +13,7 @@ window.resizable(False, False)
 
 def openFile():
     global leng
-    filename=filedialog.askopenfilename(initialdir="C:/Users/JI/Desktop/정보보안/스테가노 파일/3")
+    filename=filedialog.askopenfilename(initialdir="C:/")
     with open(filename, 'rb') as f:
         content = f.read()
     mod=binascii.hexlify(content).decode()
@@ -71,6 +71,9 @@ def changeColor(o):
     b[o]=Button(window, overrelief="flat", width=10, height=5, command=lambda c=o:changeColor(b[c].cget("text")), background=color[1], text=o)
     b[o].grid(column=o%20,row=o//20)
 
+def confirmChange():
+    pass
+
 b=[]
 def showColor(co):
     global b,fillArr
@@ -91,5 +94,7 @@ def showColor(co):
         color=str("#")+str(fillArr[i][0])+str(fillArr[i][1])+str(fillArr[i][2])
         b.append(Button(window, overrelief="flat", width=10, height=5, command=lambda c=i:changeColor(b[c].cget("text")), background=color, text=i))
         b[-1].grid(column=i%20,row=i//20)
+    confirm=Button(window, overrelief="flat", width=10, height=5, command=confirmChange)
+    confirm.grid(column=0,row=len(fillArr)//20+1)
 
 window.mainloop()
