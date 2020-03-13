@@ -12,8 +12,10 @@ window.title("ColorChanger")
 window.geometry("1600x900+160+90")
 window.resizable(False, False)
 
+MODE=3
+
 def openFile():
-    global leng,newdir,mod
+    global leng,newdir,mod,MODE
     filename=filedialog.askopenfilename(initialdir="C:/")
     with open(filename, 'rb') as f:
         content=f.read()
@@ -33,6 +35,7 @@ def openFile():
                 messagebox.showwarning("불러올 수 없음", "손상된 png 파일입니다.")
                 os.remove(newdir)
             else:
+                MODE=3
                 showColor3(mod[mod.index("504c5445")+8:mod.index("504c5445")+8+leng])
         elif mod[mod.index("49484452")+26:mod.index("49484452")+28]=="02": #truecolor
             pass
@@ -61,10 +64,11 @@ def changeColor3(o):
     b[o]=Button(window, overrelief="flat", width=10, height=5, command=lambda c=o:changeColor3(b[c].cget("text")), background=color[1], text=o)
     b[o].grid(column=o%20,row=o//20)
 
-def confirmChange3():
+def confirmChange(mode):
     global mod,newdir,plte
     newmod=open(newdir,'w')
-    newmod.write(str(mod[0:mod.index("504c5445")+8])+str(''.join(plte))+str(mod[mod.index("49444154")-16:len(mod)]))
+    if mode==3:
+        newmod.write(str(mod[0:mod.index("504c5445")+8])+str(''.join(plte))+str(mod[mod.index("49444154")-16:len(mod)]))
     newmod.close()
     
 b=[]
@@ -93,7 +97,7 @@ menuBar=Menu(window)
 menu1=Menu(menuBar, tearoff=0)
 menu1.add_command(label="열기", command=openFile)
 menu1.add_separator()
-menu1.add_command(label="저장", command=confirmChange3)
+menu1.add_command(label="저장", command=lambda:confirmChange(MODE))
 menu1.add_command(label="다른 이름으로 저장")
 menuBar.add_cascade(label="파일", menu=menu1)
 
