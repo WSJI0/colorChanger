@@ -2,21 +2,32 @@ from tkinter import filedialog
 from tkinter import Button
 from tkinter import messagebox
 from tkinter import colorchooser
+from tkinter import Frame
 from tkinter import *
 from math import floor
 import binascii
 import os
 
 window=Tk()
+window.iconbitmap(default='icon.ico')
 window.title("ColorChanger")
-window.geometry("1600x900+160+90")
+window.geometry("1600x900+160+40")
 window.resizable(False, False)
+
+frame=Frame(window, width=1600, height=900, bd=1, relief='solid')
+frame.pack(side="left", fill="both", expand=False)
+
+'''
+frame2=Frame(window, width=100, height=900, bd=1, relief='solid')
+frame2.pack(side="right", fill="both", expand=False)
+'''
+
 
 MODE=3
 
 def openFile():
     global leng,newdir,mod,MODE
-    filename=filedialog.askopenfilename(initialdir="C:/")
+    filename=filedialog.askopenfilename(initialdir="C:/Users/JI/Desktop/정보보안/스테가노 파일/3")
     with open(filename, 'rb') as f:
         content=f.read()
     mod=binascii.hexlify(content).decode()
@@ -61,14 +72,24 @@ def changeColor3(o):
     plte[o*3+1]=str("{0:x}".format(floor(color[0][1])).zfill(2))
     plte[o*3+2]=str("{0:x}".format(floor(color[0][2])).zfill(2))
 
-    b[o]=Button(window, overrelief="flat", width=10, height=5, command=lambda c=o:changeColor3(b[c].cget("text")), background=color[1], text=o)
-    b[o].grid(column=o%20,row=o//20)
+    b[o]=Button(frame, overrelief="flat", command=lambda c=o:changeColor3(b[c].cget("text")), background=color[1], text=o)
+    b[o].place(x=50*(o%32), y=50*(o//32), width=50, height=50)
 
 def confirmChange(mode):
     global mod,newdir,plte
     newmod=open(newdir,'w')
     if mode==3:
-        newmod.write(str(mod[0:mod.index("504c5445")+8])+str(''.join(plte))+str(mod[mod.index("49444154")-16:len(mod)]))
+        new=bytearray.fromhex(str(mod[0:mod.index("504c5445")+8])+str(''.join(plte))+str(mod[mod.index("49444154")-16:len(mod)])).hex() #.decode(encoding='ANSI',errors='ignore')
+        '''
+        new2=""
+        start=0
+        while start!=len(new):
+            new2+=chr(int(new[start:start+2],16))
+            start+=2
+        print(new2.encode(encoding='ANSI',errors='ignore').decode('ASCII'))
+        #newmod.write(new2)
+        '''
+        print(new)
     newmod.close()
     
 b=[]
@@ -84,14 +105,15 @@ def showColor3(co):
     for k in range(0,len(plte),3):
         fillArr.append([plte[k],plte[k+1],plte[k+2]])
 
-    for j in window.grid_slaves():
+    for j in frame.place_slaves():
         j.destroy()
     b=[]
-    for i in range(len(fillArr)):
+    for i in range(len(fillArr)): 
+        print(i)
         color=str("#")+str(fillArr[i][0])+str(fillArr[i][1])+str(fillArr[i][2])
-        b.append(Button(window, overrelief="flat", width=10, height=5, command=lambda c=i:changeColor3(b[c].cget("text")), background=color, text=i))
-        b[-1].grid(column=i%20,row=i//20)
-
+        b.append(Button(frame, overrelief="flat", command=lambda c=i:changeColor3(b[c].cget("text")), background=color, text=i))
+        b[-1].place(x=50*(i%32), y=50*(i//32), width=50, height=50)
+    
 
 menuBar=Menu(window)
 menu1=Menu(menuBar, tearoff=0)
