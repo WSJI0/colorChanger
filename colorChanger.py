@@ -26,15 +26,15 @@ frame2.pack(side="right", fill="both", expand=False)
 MODE=3
 
 def openFile():
-    global leng,newdir,mod,MODE
-    filename=filedialog.askopenfilename(initialdir="C:/Users/JI/Desktop/정보보안/스테가노 파일/3")
+    global leng,newdir,mod,MODE,fn_ext
+    filename=filedialog.askopenfilename(initialdir="C:/")
     with open(filename, 'rb') as f:
         content=f.read()
     mod=binascii.hexlify(content).decode()
 
-    filenameArr=filename.split("/")
-    filenameArr[len(filenameArr)-1]='temp.txt'
-    newdir=str('/'.join(filenameArr))
+    fn_ext=os.path.splitext(filename)
+
+    newdir=fn_ext[0]+'-colormodified.txt'
     oldmod=open(newdir,'w')
     oldmod.write(mod)
     oldmod.close()
@@ -76,21 +76,17 @@ def changeColor3(o):
     b[o].place(x=50*(o%32), y=50*(o//32), width=50, height=50)
 
 def confirmChange(mode):
-    global mod,newdir,plte
+    global mod,newdir,plte,fn_ext
     newmod=open(newdir,'w')
     if mode==3:
         new=bytearray.fromhex(str(mod[0:mod.index("504c5445")+8])+str(''.join(plte))+str(mod[mod.index("49444154")-16:len(mod)])).hex() #.decode(encoding='ANSI',errors='ignore')
-        '''
-        new2=""
-        start=0
-        while start!=len(new):
-            new2+=chr(int(new[start:start+2],16))
-            start+=2
-        print(new2.encode(encoding='ANSI',errors='ignore').decode('ASCII'))
-        #newmod.write(new2)
-        '''
+        new2=binascii.a2b_hex(new)
         print(new)
+        with open(fn_ext[0]+'-colormodified.png', 'wb') as png:
+            png.write(new2)
     newmod.close()
+    os.remove(newdir)
+    messagebox.showinfo("저장", "저장되었습니다.")
     
 b=[]
 def showColor3(co):
@@ -109,7 +105,6 @@ def showColor3(co):
         j.destroy()
     b=[]
     for i in range(len(fillArr)): 
-        print(i)
         color=str("#")+str(fillArr[i][0])+str(fillArr[i][1])+str(fillArr[i][2])
         b.append(Button(frame, overrelief="flat", command=lambda c=i:changeColor3(b[c].cget("text")), background=color, text=i))
         b[-1].place(x=50*(i%32), y=50*(i//32), width=50, height=50)
