@@ -79,9 +79,8 @@ def confirmChange(mode):
     global mod,newdir,plte,fn_ext
     newmod=open(newdir,'w')
     if mode==3:
-        new=bytearray.fromhex(str(mod[0:mod.index("504c5445")+8])+str(''.join(plte))+str(mod[mod.index("49444154")-16:len(mod)])).hex() #.decode(encoding='ANSI',errors='ignore')
+        new=bytearray.fromhex(str(mod[0:mod.index("504c5445")+8])+str(''.join(plte))+str(mod[mod.index("49444154")-16:len(mod)])).hex()
         new2=binascii.a2b_hex(new)
-        print(new)
         with open(fn_ext[0]+'-colormodified.png', 'wb') as png:
             png.write(new2)
     newmod.close()
