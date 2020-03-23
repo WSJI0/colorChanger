@@ -86,6 +86,18 @@ def confirmChange(mode):
     newmod.close()
     os.remove(newdir)
     messagebox.showinfo("저장", "저장되었습니다.")
+
+def reverseColor():
+    global fillArr,b,plte
+    for o in range(len(fillArr)):
+        plte[o*3]=str("{0:x}".format(floor(255-int(fillArr[o][0],16))).zfill(2))
+        plte[o*3+1]=str("{0:x}".format(floor(255-int(fillArr[o][1],16))).zfill(2))
+        plte[o*3+2]=str("{0:x}".format(floor(255-int(fillArr[o][2],16))).zfill(2))
+
+        newReColor=str('#')+str(plte[o*3])+str(plte[o*3+1])+str(plte[o*3+2])
+
+        b[o]=Button(frame, overrelief="flat", command=lambda c=o:changeColor3(b[c].cget("text")), background=newReColor, text=o)
+        b[o].place(x=50*(o%32), y=50*(o//32), width=50, height=50)
     
 b=[]
 def showColor3(co):
@@ -107,6 +119,9 @@ def showColor3(co):
         color=str("#")+str(fillArr[i][0])+str(fillArr[i][1])+str(fillArr[i][2])
         b.append(Button(frame, overrelief="flat", command=lambda c=i:changeColor3(b[c].cget("text")), background=color, text=i))
         b[-1].place(x=50*(i%32), y=50*(i//32), width=50, height=50)
+
+    reColor=Button(frame, overrelief="flat", command=reverseColor, background='#c3c3c3', text='색 반전')
+    reColor.place(x=50, y=50*(len(fillArr)//32)+50, width=100, height=50)
     
 
 menuBar=Menu(window)
