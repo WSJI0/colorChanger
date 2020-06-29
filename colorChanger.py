@@ -3,6 +3,9 @@ from tkinter import Button
 from tkinter import messagebox
 from tkinter import colorchooser
 from tkinter import Frame
+from PIL import Image
+from PIL import ImageTK
+from tkinter import Label
 from tkinter import *
 from math import floor
 import binascii
@@ -78,7 +81,7 @@ def changeColor3(o):
 def confirmChange(mode):
     global mod,newdir,plte,fn_ext
     newmod=open(newdir,'w')
-    if mode==3:
+    if mode==3: 
         new=bytearray.fromhex(str(mod[0:mod.index("504c5445")+8])+str(''.join(plte))+str(mod[mod.index("49444154")-16:len(mod)])).hex()
         new2=binascii.a2b_hex(new)
         with open(fn_ext[0]+'-colormodified.png', 'wb') as png:
@@ -101,7 +104,7 @@ def reverseColor():
     
 b=[]
 def showColor3(co):
-    global b,fillArr,plte
+    global b,fillArr,plte,fn_ext,window
     plte=[]
     start=0
     while start!=leng:
@@ -115,13 +118,21 @@ def showColor3(co):
     for j in frame.place_slaves():
         j.destroy()
     b=[]
-    for i in range(len(fillArr)): 
+    for i in range(len(fillArr)):
         color=str("#")+str(fillArr[i][0])+str(fillArr[i][1])+str(fillArr[i][2])
         b.append(Button(frame, overrelief="flat", command=lambda c=i:changeColor3(b[c].cget("text")), background=color, text=i))
         b[-1].place(x=50*(i%32), y=50*(i//32), width=50, height=50)
 
     reColor=Button(frame, overrelief="flat", command=reverseColor, background='#c3c3c3', text='색 반전')
     reColor.place(x=50, y=50*(len(fillArr)//32)+50, width=100, height=50)
+
+    fN=fn_ext[0]+'-colormodified.png'
+    photo=ImageTK.photoImage(Image.open(fN))
+    label=Label(window, image=photo)
+    label.place(x=150, y=50*(len(fillArr)//32)+50, width=100, height=100)
+    
+
+    
     
 
 menuBar=Menu(window)
