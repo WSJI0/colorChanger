@@ -3,8 +3,6 @@ from tkinter import Button
 from tkinter import messagebox
 from tkinter import colorchooser
 from tkinter import Frame
-from PIL import Image
-from PIL import ImageTK
 from tkinter import Label
 from tkinter import *
 from math import floor
